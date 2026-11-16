@@ -2,8 +2,8 @@ import random
 from copy import deepcopy
 
 from instancia import Instancia
-from solucao import calcular_makespan
 from busca_local import busca_2opt
+from vns import vns
 
 
 def melhor_insercao(
@@ -11,15 +11,6 @@ def melhor_insercao(
     solucao: list[list[int]],
     cirurgia: int
 ):
-    """
-    Encontra a melhor forma de inserir uma cirurgia
-    na solução atual.
-
-    Testa todas as salas e todas as posições possíveis.
-    Retorna:
-        melhor_solucao,
-        melhor_makespan
-    """
 
     melhor_solucao = None
     melhor_makespan = float("inf")
@@ -70,18 +61,6 @@ def construir_solucao_grasp(
     alpha: float = 0.5,
     rng: random.Random | None = None
 ):
-    """
-    Fase construtiva do GRASP.
-
-    Para cada cirurgia ainda não alocada:
-    - encontra sua melhor inserção;
-    - cria uma Lista Restrita de Candidatos (LRC);
-    - sorteia um candidato da LRC;
-    - insere a cirurgia escolhida.
-
-    alpha = 0 -> totalmente guloso
-    alpha = 1 -> totalmente aleatório
-    """
 
     if not 0 <= alpha <= 1:
         raise ValueError("alpha deve estar entre 0 e 1.")
@@ -156,9 +135,6 @@ def grasp_2opt(
     alpha: float = 0.5,
     seed: int | None = None
 ):
-    """
-    GRASP completo usando 2-opt como busca local.
-    """
 
     rng = random.Random(seed)
 
@@ -184,8 +160,6 @@ def grasp_2opt(
 
     return melhor_solucao, melhor_makespan
   
-  
-from vns import vns
 
 def grasp_vns(
     instancia: Instancia,
@@ -193,11 +167,13 @@ def grasp_vns(
     alpha: float = 0.5,
     seed: int | None = None
 ):
-    """
-    GRASP usando VNS como etapa de refinamento.
-    """
 
-    rng = random.Random(seed)
+    rng_construcao = random.Random(seed)
+
+    if seed is None:
+        rng_vns = random.Random()
+    else:
+        rng_vns = random.Random(seed + 1_000_000)
 
     melhor_solucao = None
     melhor_makespan = float("inf")
@@ -207,16 +183,18 @@ def grasp_vns(
         solucao_inicial = construir_solucao_grasp(
             instancia,
             alpha=alpha,
-            rng=rng
+            rng=rng_construcao
+        )
+
+        seed_vns = rng_vns.randint(
+            0,
+            1_000_000_000
         )
 
         solucao_local, makespan, _ = vns(
             instancia,
             solucao_inicial,
-            seed=rng.randint(
-                0,
-                1_000_000
-            )
+            seed=seed_vns
         )
 
         if makespan < melhor_makespan:
