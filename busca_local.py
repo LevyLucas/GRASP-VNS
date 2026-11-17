@@ -8,18 +8,6 @@ def busca_2opt(
     instancia: Instancia,
     solucao: list[list[int]]
 ):
-    """
-    Busca local baseada em movimentos de troca.
-
-    Testa a troca entre quaisquer duas cirurgias,
-    inclusive entre salas diferentes.
-
-    Utiliza best improvement:
-    em cada rodada, aplica a melhor troca encontrada.
-
-    A avaliação é otimizada:
-    apenas as salas afetadas pela troca são recalculadas.
-    """
 
     atual = deepcopy(solucao)
 

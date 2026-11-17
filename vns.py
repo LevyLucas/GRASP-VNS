@@ -7,11 +7,6 @@ from busca_local import busca_2opt
 
 
 def vizinhanca_n1(solucao, rng):
-    """
-    N1:
-    troca duas cirurgias dentro da mesma sala.
-    """
-
     vizinho = deepcopy(solucao)
 
     salas_validas = [
@@ -38,11 +33,6 @@ def vizinhanca_n1(solucao, rng):
 
 
 def vizinhanca_n2(solucao, rng):
-    """
-    N2:
-    realoca uma cirurgia de uma sala para outra.
-    """
-
     vizinho = deepcopy(solucao)
 
     salas_origem = [
@@ -83,11 +73,6 @@ def vizinhanca_n2(solucao, rng):
 
 
 def vizinhanca_n3(solucao, rng):
-    """
-    N3:
-    troca uma cirurgia entre duas salas diferentes.
-    """
-
     vizinho = deepcopy(solucao)
 
     salas_validas = [
@@ -120,10 +105,6 @@ def vizinhanca_n3(solucao, rng):
 
 
 def perturbar(solucao, k, rng):
-    """
-    Aplica o shaking correspondente à vizinhança k.
-    """
-
     if k == 1:
         return vizinhanca_n1(
             solucao,
@@ -152,22 +133,6 @@ def vns(
     solucao_inicial,
     seed=None
 ):
-    """
-    Variable Neighborhood Search.
-
-    N1 -> troca dentro da sala
-    N2 -> realocação entre salas
-    N3 -> troca entre salas
-
-    Após o shaking, aplica a busca local 2-opt.
-
-    Se melhorar:
-        aceita a solução e volta para N1.
-
-    Caso contrário:
-        avança para a próxima vizinhança.
-    """
-
     rng = random.Random(seed)
 
     atual = deepcopy(
@@ -184,15 +149,12 @@ def vns(
     melhorias = 0
 
     while k <= 3:
-
-        # Shaking
         perturbada = perturbar(
             atual,
             k,
             rng
         )
 
-        # Busca local
         refinada, makespan_refinado, _ = busca_2opt(
             instancia,
             perturbada
@@ -204,15 +166,9 @@ def vns(
             makespan_atual = makespan_refinado
 
             melhorias += 1
-
-            # Encontrou melhora:
-            # volta para a primeira vizinhança.
             k = 1
 
         else:
-
-            # Não melhorou:
-            # tenta uma vizinhança mais distante.
             k += 1
 
     return atual, makespan_atual, melhorias

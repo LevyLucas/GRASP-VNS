@@ -25,11 +25,6 @@ def melhor_insercao(
                 posicao,
                 cirurgia
             )
-
-            # A solução ainda pode estar incompleta.
-            # Portanto não usamos calcular_makespan(),
-            # que exige todas as cirurgias presentes.
-
             tempos_salas = []
 
             for sala_candidata in candidato:

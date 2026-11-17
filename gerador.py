@@ -10,17 +10,10 @@ def gerar_instancia(
     seed: int
 ):
     rng = random.Random(seed)
-
-    # Duração das cirurgias:
-    # valores inteiros entre 30 e 180 minutos.
     tempos = [
         rng.randint(30, 180)
         for _ in range(num_cirurgias)
     ]
-
-    # Matriz de setup:
-    # tempo de preparação entre duas cirurgias.
-    # Valores entre 5 e 30 minutos.
     setup = []
 
     for i in range(num_cirurgias):

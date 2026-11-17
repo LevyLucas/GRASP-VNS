@@ -7,10 +7,6 @@ from instancia import carregar_instancia
 from grasp import grasp_2opt, grasp_vns
 
 
-# ==========================================================
-# CONFIGURAÇÕES
-# ==========================================================
-
 EXECUCOES = 10
 ITERACOES_GRASP = 50
 ALPHA = 0.5
@@ -22,10 +18,6 @@ INSTANCIAS = [
     "SINT-75-S5",
 ]
 
-
-# ==========================================================
-# EXECUÇÃO DE UM MÉTODO
-# ==========================================================
 
 def executar_metodo(
     nome_metodo,
@@ -50,10 +42,6 @@ def executar_metodo(
         "tempo": tempo
     }
 
-
-# ==========================================================
-# CSV DETALHADO
-# ==========================================================
 
 def salvar_resultados_detalhados(
     resultados,
@@ -98,10 +86,6 @@ def salvar_resultados_detalhados(
             f"{caminho}"
         )
 
-
-# ==========================================================
-# RESUMO ESTATÍSTICO
-# ==========================================================
 
 def gerar_resumo(resultados):
     caminho = (
@@ -207,10 +191,6 @@ def gerar_resumo(resultados):
 
     return resumo
 
-
-# ==========================================================
-# COMPARAÇÃO PAREADA
-# ==========================================================
 
 def gerar_comparacao(resultados):
     caminho = (
@@ -345,10 +325,6 @@ def gerar_comparacao(resultados):
     return comparacoes
 
 
-# ==========================================================
-# EXPERIMENTO
-# ==========================================================
-
 def main():
     os.makedirs(
         "resultados",
@@ -382,10 +358,6 @@ def main():
                 f"\nExecução "
                 f"{execucao}/{EXECUCOES}"
             )
-
-            # ----------------------------------------------
-            # GRASP + 2-OPT
-            # ----------------------------------------------
 
             resultado_2opt = executar_metodo(
                 "GRASP+2-opt",
@@ -427,10 +399,6 @@ def main():
                 f"{resultado_2opt['tempo']:.4f}s"
             )
 
-            # ----------------------------------------------
-            # GRASP + VNS
-            # ----------------------------------------------
-
             resultado_vns = executar_metodo(
                 "GRASP+VNS",
                 grasp_vns,
@@ -470,9 +438,6 @@ def main():
                 f"tempo = "
                 f"{resultado_vns['tempo']:.4f}s"
             )
-
-            # Checkpoint para não perder todas
-            # as execuções se o processo parar.
             salvar_resultados_detalhados(
                 resultados
             )
@@ -491,10 +456,6 @@ def main():
     comparacoes = gerar_comparacao(
         resultados
     )
-
-    # ======================================================
-    # SAÍDA FINAL
-    # ======================================================
 
     print()
     print("=" * 60)

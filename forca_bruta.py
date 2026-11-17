@@ -5,22 +5,6 @@ from solucao import calcular_makespan
 
 
 def gerar_distribuicoes(total, partes):
-    """
-    Gera todas as formas de dividir 'total' cirurgias
-    entre 'partes' salas.
-
-    Exemplo:
-    total = 4
-    partes = 2
-
-    Pode gerar:
-    (0, 4)
-    (1, 3)
-    (2, 2)
-    (3, 1)
-    (4, 0)
-    """
-
     if partes == 1:
         yield (total,)
         return
